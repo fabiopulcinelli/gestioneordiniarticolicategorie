@@ -16,31 +16,35 @@ public class OrdineDAOImpl implements OrdineDAO{
 
 	@Override
 	public List<Ordine> list() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.createQuery("from Ordine", Ordine.class).getResultList();
 	}
 
 	@Override
 	public Ordine get(Long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.find(Ordine.class, id);
 	}
 
 	@Override
 	public void update(Ordine o) throws Exception {
-		// TODO Auto-generated method stub
-		
+		if (o == null) {
+			throw new Exception("Problema valore in input");
+		}
+		o = entityManager.merge(o);
 	}
 
 	@Override
 	public void insert(Ordine o) throws Exception {
-		// TODO Auto-generated method stub
-		
+		if (o == null) {
+			throw new Exception("Problema valore in input");
+		}
+		entityManager.persist(o);
 	}
 
 	@Override
 	public void delete(Ordine o) throws Exception {
-		// TODO Auto-generated method stub
-		
+		if (o == null) {
+			throw new Exception("Problema valore in input");
+		}
+		entityManager.remove(entityManager.merge(o));
 	}
 }

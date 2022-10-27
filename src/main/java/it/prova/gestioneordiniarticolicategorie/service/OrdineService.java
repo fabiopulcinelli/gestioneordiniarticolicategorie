@@ -16,8 +16,6 @@ public interface OrdineService {
 
 	public void rimuovi(Long ordineId) throws Exception;
 	
-	public void aggiornaOrdine(String nuovaVersione, Ordine o) throws Exception;
-	
 	// per injection
 	public void setOrdineDAO(OrdineDAO ordineDAO);
 }

@@ -54,12 +54,13 @@ public class Articolo {
 	
 	public Articolo() {}
 
-	public Articolo(String descrizione, String numeroSeriale, int prezzoSingolo, Date dataInserimento) {
+	public Articolo(String descrizione, String numeroSeriale, int prezzoSingolo, Date dataInserimento, Ordine ordine) {
 		super();
 		this.descrizione = descrizione;
 		this.numeroSeriale = numeroSeriale;
 		this.prezzoSingolo = prezzoSingolo;
 		this.dataInserimento = dataInserimento;
+		this.ordine = ordine;
 	}
 
 	public Long getId() {
