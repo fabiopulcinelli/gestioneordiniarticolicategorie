@@ -45,7 +45,7 @@ public class Articolo {
 	private LocalDateTime updateDateTime;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ordine_id")
+	@JoinColumn(name = "ordine_id", nullable = false)
 	private Ordine ordine = new Ordine();
 	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
