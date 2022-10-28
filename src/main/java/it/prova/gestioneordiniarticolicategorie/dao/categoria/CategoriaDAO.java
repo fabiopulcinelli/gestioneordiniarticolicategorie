@@ -4,5 +4,8 @@ import it.prova.gestioneordiniarticolicategorie.dao.IBaseDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 
 public interface CategoriaDAO extends IBaseDAO<Categoria>{
-	//metodi NON CRUD da inserire
+
+	public Categoria findByIdFetchingArticoli(Long idCategoria) throws Exception;
+
+	public void removeArticoli(Long idArticolo, Long idCategoria) throws Exception;
 }

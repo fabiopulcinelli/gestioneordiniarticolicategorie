@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import it.prova.gestioneordiniarticolicategorie.exception.OrdiniArticoliCategorieException;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineDAOImpl implements OrdineDAO{
@@ -41,9 +42,9 @@ public class OrdineDAOImpl implements OrdineDAO{
 	}
 
 	@Override
-	public void delete(Ordine o) throws Exception {
-		if (o == null) {
-			throw new Exception("Problema valore in input");
+	public void delete(Ordine o) throws OrdiniArticoliCategorieException  {
+		if (o == null || o.getArticoli().size() > 0) {
+			throw new OrdiniArticoliCategorieException("NON PUOI RIMUOVERE ORDINI CON CATEGORIE LINKATE");
 		}
 		entityManager.remove(entityManager.merge(o));
 	}

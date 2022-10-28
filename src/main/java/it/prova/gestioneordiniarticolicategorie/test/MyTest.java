@@ -5,6 +5,7 @@ import it.prova.gestioneordiniarticolicategorie.service.OrdineService;
 import java.util.Date;
 
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
+import it.prova.gestioneordiniarticolicategorie.exception.OrdiniArticoliCategorieException;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
@@ -45,6 +46,12 @@ public class MyTest {
 			testAggiungiCategoriaAdArticolo(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
 			
 			testAggiungiArticoloACategoria(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+			
+			testRimuoviArticolo(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+			
+			testRimuoviCategoria(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+			
+			testRimuoviOrdine(articoloServiceInstance, ordineServiceInstance);
 			
 			System.out.println(
 					"****************************** fine batteria di test ********************************************");
@@ -229,5 +236,89 @@ public class MyTest {
 		articoloServiceInstance.aggiungiCategoria(articoloInstance, categoriaInstance);
 
 		System.out.println(".......testAggiungiArticoloACategoria fine: PASSED.............");
+	}
+	
+	public static void testRimuoviArticolo(ArticoloService articoloServiceInstance, CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception{
+		System.out.println(".......testRimuoviArticolo inizio.............");
+		
+		// carico un categoria e lo associo ad un nuovo articolo
+		Categoria categoriaEsistenteSuDb = categoriaServiceInstance.listAll().get(1);
+		if (categoriaEsistenteSuDb == null)
+			throw new RuntimeException("testRimuoviArticolo fallito: categoria inesistente ");
+
+		// inserisco un nuovo articolo ma mi serve inserire anche un nuovo ordine
+		Ordine ordineInstance = new Ordine("Ordine4","Prova4", new Date(), new Date());
+		ordineServiceInstance.inserisciNuovo(ordineInstance);
+		if (ordineInstance.getId() == null)
+			throw new RuntimeException("testRimuoviArticolo fallito ");
+		
+		// mi creo un articolo inserendolo direttamente su db lascio ordine a null solo per questo test
+		Articolo articoloNuovo = new Articolo("Articolo4","Prova4",75 ,new Date(), ordineInstance);
+		articoloServiceInstance.inserisciNuovo(articoloNuovo);
+		if (articoloNuovo.getId() == null)
+			throw new RuntimeException("testRimuoviArticolo fallito: articolo non inserito ");
+		articoloServiceInstance.aggiungiCategoria(articoloNuovo, categoriaEsistenteSuDb);
+
+		// ora ricarico il record e provo a disassociare il categoria
+		Articolo articoloReloaded = articoloServiceInstance.caricaSingoloElemento(articoloNuovo.getId());
+				
+		//per prima cosa scollego l'articolo dalla categoria
+		articoloServiceInstance.rimuoviCategoriaDaArticolo(articoloReloaded.getId(), categoriaEsistenteSuDb.getId());
+		
+		//ora che ho rimosso il collegamento posso rimuovere articolo lasciando la categoria intatta
+		articoloServiceInstance.rimuovi(articoloReloaded.getId());
+		if (articoloReloaded.getId() == null)
+			throw new RuntimeException("testRimuoviArticolo fallito: rimozione fallita ");
+		
+		System.out.println(".......testRimuoviArticolo fine: PASSED.............");
+	}
+	
+	public static void testRimuoviCategoria(ArticoloService articoloServiceInstance, CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception{
+		System.out.println(".......testRimuoviCategoria inizio.............");
+		
+		// carico un articolo e lo associo ad un nuovo categoria
+		Categoria categoriaNuovo = new Categoria("codice5","descrizione5");
+		categoriaServiceInstance.inserisciNuovo(categoriaNuovo);
+		if (categoriaNuovo.getId() == null)
+			throw new RuntimeException("testRimuoviCategoria fallito: categoria non inserito ");
+		
+		Articolo articoloEsistenteSuDb = articoloServiceInstance.listAll().get(0);
+		if (articoloEsistenteSuDb == null)
+			throw new RuntimeException("testRimuoviCategoria fallito: articolo inesistente ");
+		categoriaServiceInstance.aggiungiArticolo(articoloEsistenteSuDb, categoriaNuovo);
+
+		// ora ricarico il record e provo a disassociare il categoria
+		Categoria categoriaReloaded = categoriaServiceInstance.caricaSingoloElemento(categoriaNuovo.getId());
+				
+		//per prima cosa scollego l'articolo dalla categoria
+		categoriaServiceInstance.rimuoviArticoloDaCategoria(articoloEsistenteSuDb.getId(), categoriaReloaded.getId());
+		
+		//ora che ho rimosso il collegamento posso rimuovere articolo lasciando la categoria intatta
+		categoriaServiceInstance.rimuovi(categoriaReloaded.getId());
+		if (categoriaReloaded.getId() == null)
+			throw new RuntimeException("testRimuoviCategoria fallito: rimozione fallita ");
+		
+		System.out.println(".......testRimuoviCategoria fine: PASSED.............");
+	}
+	
+	public static void testRimuoviOrdine(ArticoloService articoloServiceInstance, OrdineService ordineServiceInstance) throws Exception, OrdiniArticoliCategorieException {
+		System.out.println(".......testRimuoviOrdine inizio.............");
+		
+		Ordine ordineInstance = new Ordine("Ordine5","Prova5", new Date(), new Date());
+		ordineServiceInstance.inserisciNuovo(ordineInstance);
+		if (ordineInstance.getId() == null)
+			throw new RuntimeException("testRimuoviArticolo fallito ");
+		
+		Articolo articoloNuovo = new Articolo("Articolo6","Prova6",75 ,new Date(), ordineInstance);
+		
+		// SE levi questo commento lancia eccezzione custom perche' non puoi rimuovere un ordine
+		// con una categoria!
+		//articoloServiceInstance.inserisciNuovo(articoloNuovo);
+		
+		ordineServiceInstance.rimuovi(ordineInstance.getId());
+		if (ordineInstance.getId() == null)
+			throw new RuntimeException("testRimuoviArticolo fallito: rimozione fallita ");
+		
+		System.out.println(".......testRimuoviOrdine fine: PASSED.............");
 	}
 }

@@ -4,5 +4,4 @@ import it.prova.gestioneordiniarticolicategorie.dao.IBaseDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public interface OrdineDAO  extends IBaseDAO<Ordine>{
-	//metodi NON CRUD da inserire
 }
