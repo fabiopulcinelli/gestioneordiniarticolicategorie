@@ -3,8 +3,10 @@ package it.prova.gestioneordiniarticolicategorie.dao.ordine;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import it.prova.gestioneordiniarticolicategorie.exception.OrdiniArticoliCategorieException;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineDAOImpl implements OrdineDAO{
@@ -47,5 +49,25 @@ public class OrdineDAOImpl implements OrdineDAO{
 			throw new OrdiniArticoliCategorieException("NON PUOI RIMUOVERE ORDINI CON CATEGORIE LINKATE");
 		}
 		entityManager.remove(entityManager.merge(o));
+	}
+
+	@Override
+	public List<Ordine> findAllByCategoria(Categoria categoriaInput) throws Exception {
+		TypedQuery<Ordine> query = entityManager
+				.createQuery("SELECT o FROM Ordine o join fetch o.articoli a "
+						+ "join fetch a.categorie c "
+						+ "WHERE c.id = ?1", Ordine.class);
+		query.setParameter(1, categoriaInput.getId());
+		return query.getResultList();
+	}
+
+	@Override
+	public Ordine findMostRecentOrdineByCategoria(Categoria categoriaInput) throws Exception {
+		TypedQuery<Ordine> query = entityManager
+				.createQuery("SELECT o FROM Ordine o join fetch o.articoli a "
+						+ "join fetch a.categorie c "
+						+ "WHERE c.id = ?1 ORDER BY dataspedizione DESC", Ordine.class);
+		query.setParameter(1, categoriaInput.getId());
+		return query.getSingleResult();
 	}
 }

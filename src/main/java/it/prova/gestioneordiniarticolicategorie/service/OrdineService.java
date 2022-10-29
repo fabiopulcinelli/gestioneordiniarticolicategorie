@@ -3,6 +3,7 @@ package it.prova.gestioneordiniarticolicategorie.service;
 import java.util.List;
 
 import it.prova.gestioneordiniarticolicategorie.dao.ordine.OrdineDAO;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public interface OrdineService {
@@ -15,6 +16,10 @@ public interface OrdineService {
 	public void inserisciNuovo(Ordine ordineInstance) throws Exception;
 
 	public void rimuovi(Long ordineId) throws Exception;
+	
+	public List<Ordine> trovaTuttiPerCategoria(Categoria categoriaInput) throws Exception;
+	
+	public Ordine trovaOrdinePiuRecentePerCategoria(Categoria categoriaInput) throws Exception;
 	
 	// per injection
 	public void setOrdineDAO(OrdineDAO ordineDAO);

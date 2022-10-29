@@ -3,6 +3,7 @@ package it.prova.gestioneordiniarticolicategorie.test;
 import it.prova.gestioneordiniarticolicategorie.service.OrdineService;
 
 import java.util.Date;
+import java.util.List;
 
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.exception.OrdiniArticoliCategorieException;
@@ -52,6 +53,14 @@ public class MyTest {
 			testRimuoviCategoria(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
 			
 			testRimuoviOrdine(articoloServiceInstance, ordineServiceInstance);
+			
+			testTrovaTuttiPerCategoria(ordineServiceInstance, categoriaServiceInstance);
+			
+			testTrovaTuttiPerOrdine(ordineServiceInstance, categoriaServiceInstance);
+			
+			testSommaTotalePerCategoria(articoloServiceInstance, categoriaServiceInstance);
+			
+			testTrovaOrdinePiuRecentePerCategoria(ordineServiceInstance, categoriaServiceInstance);
 			
 			System.out.println(
 					"****************************** fine batteria di test ********************************************");
@@ -320,5 +329,69 @@ public class MyTest {
 			throw new RuntimeException("testRimuoviArticolo fallito: rimozione fallita ");
 		
 		System.out.println(".......testRimuoviOrdine fine: PASSED.............");
+	}
+	
+	public static void testTrovaTuttiPerCategoria(OrdineService ordineServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println(".......testTrovaTuttiPerCategoria inizio.............");
+		
+		//prendo una categoria che so gia che e' linkata
+		Categoria categoriaInstance = categoriaServiceInstance.listAll().get(2);
+		if(categoriaInstance.getId() == null)
+			throw new RuntimeException("testTrovaTuttiPerCategoria fallito: categoria non trovata ");
+		
+		List<Ordine> ordiniTrovati = ordineServiceInstance.trovaTuttiPerCategoria(categoriaInstance);
+		// me ne aspetto uno quindi se diverso da uno eccezione
+		if(ordiniTrovati.size() != 1)
+			throw new RuntimeException("testTrovaTuttiPerCategoria fallito: numero record aspettati inesatto ");
+
+		System.out.println(".......testTrovaTuttiPerCategoria fine: PASSED.............");
+	}
+	
+	public static void testTrovaTuttiPerOrdine(OrdineService ordineServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println(".......testTrovaTuttiPerOrdine inizio.............");
+		
+		//prendo un ordine che so gia che e' linkato
+		Ordine ordineInstance = ordineServiceInstance.listAll().get(2);
+		if(ordineInstance.getId() == null)
+			throw new RuntimeException("testTrovaTuttiPerOrdine fallito: ordine non trovato ");
+		
+		List<Categoria> caegorieTrovate = categoriaServiceInstance.trovaTuttiPerOrdine(ordineInstance);
+		// me ne aspetto uno quindi se diverso da uno eccezione
+		if(caegorieTrovate.size() != 1)
+			throw new RuntimeException("testTrovaTuttiPerOrdine fallito: numero record aspettati inesatto ");
+
+		System.out.println(".......testTrovaTuttiPerOrdine fine: PASSED.............");
+	}
+	
+	public static void testSommaTotalePerCategoria(ArticoloService articoloServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println(".......testSommaTotalePerCategoria inizio.............");
+		
+		//prendo una categoria gia linkata
+		Categoria categoriaInstance = categoriaServiceInstance.listAll().get(1);
+		if(categoriaInstance.getId() == null)
+			throw new RuntimeException("testSommaTotalePerCategoria fallito: categoria non trovata ");
+		
+		Long sommaArticoli = articoloServiceInstance.sommaTotalePerCategoria(categoriaInstance);
+		// mi aspetto che la somma totale sia 50 quindi se diverso eccezione
+		if(sommaArticoli != 50)
+			throw new RuntimeException("testSommaTotalePerCategoria fallito: somma non conforme ");
+
+		System.out.println(".......testSommaTotalePerCategoria fine: PASSED.............");
+	}
+	
+	public static void testTrovaOrdinePiuRecentePerCategoria(OrdineService ordineServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println(".......testTrovaOrdinePiuRecentePerCategoria inizio.............");
+		
+		//prendo una categoria che so gia che e' linkata
+		Categoria categoriaInstance = categoriaServiceInstance.listAll().get(2);
+		if(categoriaInstance.getId() == null)
+			throw new RuntimeException("testTrovaOrdinePiuRecentePerCategoria fallito: categoria non trovata ");
+		
+		Ordine ordineTrovato = ordineServiceInstance.trovaOrdinePiuRecentePerCategoria(categoriaInstance);
+		
+		if(ordineTrovato.getId() == null)
+			throw new RuntimeException("testTrovaOrdinePiuRecentePerCategoria fallito: ordine non trovato");
+
+		System.out.println(".......testTrovaOrdinePiuRecentePerCategoria fine: PASSED.............");
 	}
 }

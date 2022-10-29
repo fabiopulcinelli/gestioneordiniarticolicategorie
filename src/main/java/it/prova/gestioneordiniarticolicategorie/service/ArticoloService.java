@@ -22,6 +22,8 @@ public interface ArticoloService {
 	
 	public void rimuoviCategoriaDaArticolo(Long idArticolo, Long idCategoria) throws Exception;
 	
+	public Long sommaTotalePerCategoria(Categoria categoriaInput) throws Exception;
+	
 	// per injection
 	public void setArticoloDAO(ArticoloDAO articoloDAO);
 	

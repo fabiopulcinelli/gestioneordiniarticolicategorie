@@ -6,6 +6,7 @@ import it.prova.gestioneordiniarticolicategorie.dao.articolo.ArticoloDAO;
 import it.prova.gestioneordiniarticolicategorie.dao.categoria.CategoriaDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
+import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public interface CategoriaService {
 	public List<Categoria> listAll() throws Exception;
@@ -24,6 +25,8 @@ public interface CategoriaService {
 	public void setCategoriaDAO(CategoriaDAO categoriaDAO);
 
 	void rimuoviArticoloDaCategoria(Long idArticolo, Long idCategoria) throws Exception;
+	
+	public List<Categoria> trovaTuttiPerOrdine(Ordine ordineInput) throws Exception;
 
 	void setArticoloDAO(ArticoloDAO articoloDAO);
 }
