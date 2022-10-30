@@ -3,7 +3,6 @@ package it.prova.gestioneordiniarticolicategorie.service;
 import java.util.List;
 
 import it.prova.gestioneordiniarticolicategorie.dao.articolo.ArticoloDAO;
-import it.prova.gestioneordiniarticolicategorie.dao.categoria.CategoriaDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 
@@ -26,8 +25,8 @@ public interface ArticoloService {
 	
 	public Long sommaTotalePerOrdineDestinatario(String destinatario) throws Exception;
 	
+	public List<Articolo> trovaTuttiPerOrdineErrore() throws Exception;
+	
 	// per injection
 	public void setArticoloDAO(ArticoloDAO articoloDAO);
-	
-	public void setCategoriaDAO(CategoriaDAO categoriaDAO);
 }

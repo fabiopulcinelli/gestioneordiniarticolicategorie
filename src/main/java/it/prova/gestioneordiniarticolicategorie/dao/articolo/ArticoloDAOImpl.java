@@ -7,8 +7,6 @@ import javax.persistence.TypedQuery;
 
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
-import it.prova.gestioneordiniarticolicategorie.model.Ordine;
-
 public class ArticoloDAOImpl implements ArticoloDAO{
 	private EntityManager entityManager;
 
@@ -81,5 +79,14 @@ public class ArticoloDAOImpl implements ArticoloDAO{
 						+ "WHERE o.nomeDestinatario = ?1", Long.class);
 		query.setParameter(1, destinatario);
 		return query.getSingleResult();
+	}
+
+	@Override
+	public List<Articolo> findAllByOrdineErorr() throws Exception {
+		TypedQuery<Articolo> query = entityManager
+				.createQuery("SELECT a FROM Articolo a join a.ordine o "
+						+ "WHERE dataspedizione > datascadenza", Articolo.class);
+		
+		return query.getResultList();
 	}
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
@@ -84,7 +83,6 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 						+ "WHERE YEAR(o.dataSpedizione) = YEAR(?1) AND MONTH(o.dataSpedizione) = MONTH(?1)", String.class);
 		query.setParameter(1, dataInput);
 		
-		System.out.println(query);
 		return query.getResultList();
 	}
 }

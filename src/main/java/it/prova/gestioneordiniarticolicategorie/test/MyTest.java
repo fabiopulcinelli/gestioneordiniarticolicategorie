@@ -92,7 +92,7 @@ public class MyTest {
 	public static void testInserimentoNuovoOrdine(OrdineService ordineServiceInstance) throws Exception{
 		System.out.println(".......testInserimentoNuovoOrdine inizio.............");
 
-		Ordine ordineInstance = new Ordine("Prova","Prova", new Date(), new Date());
+		Ordine ordineInstance = new Ordine("Prova","Prova", new Date(), new SimpleDateFormat("dd-MM-yyyy").parse("01-01-2022"));
 		ordineServiceInstance.inserisciNuovo(ordineInstance);
 		if (ordineInstance.getId() == null)
 			throw new RuntimeException("testInserimentoNuovoOrdine fallito ");
@@ -454,5 +454,16 @@ public class MyTest {
 		}*/
 		
 		System.out.println(".......testTrovaTuttiIndirizziPerNumeroSerialeLike fine: PASSED.............");
+	}
+	
+	public static void testTrovaTuttiPerOrdineErrore(ArticoloService articoloServiceInstance) throws Exception {
+System.out.println(".......testTrovaTuttiPerOrdineErrore inizio.............");
+		
+		List<Articolo> articoliTrovati = articoloServiceInstance.trovaTuttiPerOrdineErrore();
+		// mi aspetto di trovare solo un articolo con date errate
+		if(articoliTrovati.size() != 1)
+			throw new RuntimeException("testTrovaTuttiPerOrdineErrore fallito: numero record aspettati inesatto ");
+		
+		System.out.println(".......testTrovaTuttiPerOrdineErrore fine: PASSED.............");
 	}
 }

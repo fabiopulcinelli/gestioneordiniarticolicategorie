@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import it.prova.gestioneordiniarticolicategorie.dao.ordine.OrdineDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
-import it.prova.gestioneordiniarticolicategorie.service.OrdineService;
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 
 public class OrdineServiceImpl implements OrdineService{

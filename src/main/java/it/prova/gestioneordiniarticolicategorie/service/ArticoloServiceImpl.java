@@ -6,23 +6,15 @@ import javax.persistence.EntityManager;
 
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.dao.articolo.ArticoloDAO;
-import it.prova.gestioneordiniarticolicategorie.dao.categoria.CategoriaDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
-import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class ArticoloServiceImpl implements ArticoloService {
 	private ArticoloDAO articoloDAO;
-	private CategoriaDAO categoriaDAO;
 
 	@Override
 	public void setArticoloDAO(ArticoloDAO articoloDAO) {
 		this.articoloDAO = articoloDAO;
-	}
-	
-	@Override
-	public void setCategoriaDAO(CategoriaDAO categoriaDAO) {
-		this.categoriaDAO = categoriaDAO;
 	}
 
 	@Override
@@ -218,6 +210,22 @@ public class ArticoloServiceImpl implements ArticoloService {
 			articoloDAO.setEntityManager(entityManager);
 
 			return articoloDAO.totalSumByDestinatarioOrdine(destinatario);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
+	@Override
+	public List<Articolo> trovaTuttiPerOrdineErrore() throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			articoloDAO.setEntityManager(entityManager);
+
+			return articoloDAO.findAllByOrdineErorr();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
