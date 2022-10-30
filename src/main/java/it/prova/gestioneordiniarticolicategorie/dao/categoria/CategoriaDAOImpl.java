@@ -1,5 +1,6 @@
 package it.prova.gestioneordiniarticolicategorie.dao.categoria;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -72,6 +73,18 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 						+ "join fetch a.ordine o "
 						+ "WHERE o.id = ?1", Categoria.class);
 		query.setParameter(1, ordineInput.getId());
+		return query.getResultList();
+	}
+	
+	@Override
+	public List<String> findAllCodiciByOrdineMonth(Date dataInput) throws Exception {
+		TypedQuery<String> query = entityManager
+				.createQuery("SELECT DISTINCT c.codice FROM Categoria c join c.articoli a "
+						+ "join a.ordine o "
+						+ "WHERE YEAR(o.dataSpedizione) = YEAR(?1) AND MONTH(o.dataSpedizione) = MONTH(?1)", String.class);
+		query.setParameter(1, dataInput);
+		
+		System.out.println(query);
 		return query.getResultList();
 	}
 }

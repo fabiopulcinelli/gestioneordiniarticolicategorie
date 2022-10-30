@@ -21,6 +21,8 @@ public interface OrdineService {
 	
 	public Ordine trovaOrdinePiuRecentePerCategoria(Categoria categoriaInput) throws Exception;
 	
+	public List<String> trovaTuttiIndirizziPerNumeroSerialeLike(String stringa) throws Exception;
+	
 	// per injection
 	public void setOrdineDAO(OrdineDAO ordineDAO);
 }

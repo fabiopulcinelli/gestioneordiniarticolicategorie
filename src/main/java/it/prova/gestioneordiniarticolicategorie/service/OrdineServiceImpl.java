@@ -158,4 +158,20 @@ public class OrdineServiceImpl implements OrdineService{
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 	}
+
+	@Override
+	public List<String> trovaTuttiIndirizziPerNumeroSerialeLike(String stringa) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			ordineDAO.setEntityManager(entityManager);
+
+			return ordineDAO.findAllIndirizziByNumeroSerialeLike(stringa);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
 }

@@ -70,4 +70,14 @@ public class OrdineDAOImpl implements OrdineDAO{
 		query.setParameter(1, categoriaInput.getId());
 		return query.getSingleResult();
 	}
+
+	@Override
+	public List<String> findAllIndirizziByNumeroSerialeLike(String stringa) throws Exception {
+		TypedQuery<String> query = entityManager
+				.createQuery("SELECT DISTINCT o.indirizzoSpedizione FROM Ordine o "
+						+ "join o.articoli a "
+						+ "WHERE a.numeroSeriale LIKE ?1", String.class);
+		query.setParameter(1, "%" + stringa + "%");
+		return query.getResultList();
+	}
 }

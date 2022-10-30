@@ -13,4 +13,6 @@ public interface ArticoloDAO extends IBaseDAO<Articolo>{
 	public void removeCategoria(Long idArticolo, Long idCategoria) throws Exception;
 	
 	public Long totalSumByCategoria(Categoria categoriaInput) throws Exception;
+	
+	public Long totalSumByDestinatarioOrdine(String destinatario) throws Exception;
 }

@@ -2,6 +2,7 @@ package it.prova.gestioneordiniarticolicategorie.test;
 
 import it.prova.gestioneordiniarticolicategorie.service.OrdineService;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class MyTest {
 					"**************************** inizio batteria di test ********************************************");
 			System.out.println(
 					"*************************************************************************************************");
+			
+			// Nel persistence lascio sempre a create in modo da non sporcare la base dati
+			// ed averne una nuova per ogni run
 			
 			testInserimentoNuovoOrdine(ordineServiceInstance);
 			
@@ -61,6 +65,12 @@ public class MyTest {
 			testSommaTotalePerCategoria(articoloServiceInstance, categoriaServiceInstance);
 			
 			testTrovaOrdinePiuRecentePerCategoria(ordineServiceInstance, categoriaServiceInstance);
+			
+			testTrovaTuttiCodiciPerMeseOrdine(categoriaServiceInstance);
+			
+			testSommaTotalePerOrdineDestinatario(articoloServiceInstance);
+			
+			testTrovaTuttiIndirizziPerNumeroSerialeLike(ordineServiceInstance);
 			
 			System.out.println(
 					"****************************** fine batteria di test ********************************************");
@@ -331,6 +341,8 @@ public class MyTest {
 		System.out.println(".......testRimuoviOrdine fine: PASSED.............");
 	}
 	
+	// per i test di SELECT smetto di inserire dati a mano, mi prendo i dati gia inseriti sul db
+	
 	public static void testTrovaTuttiPerCategoria(OrdineService ordineServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
 		System.out.println(".......testTrovaTuttiPerCategoria inizio.............");
 		
@@ -393,5 +405,54 @@ public class MyTest {
 			throw new RuntimeException("testTrovaOrdinePiuRecentePerCategoria fallito: ordine non trovato");
 
 		System.out.println(".......testTrovaOrdinePiuRecentePerCategoria fine: PASSED.............");
+	}
+	
+	public static void testTrovaTuttiCodiciPerMeseOrdine(CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println(".......testTrovaTuttiCodiciPerMeseOrdine inizio.............");
+		
+		// creo una data di anno e mese che ho
+		Date dataInput = new Date();
+		
+		List<String> caegorieTrovate = categoriaServiceInstance.trovaTuttiCodiciPerMeseOrdine(dataInput);
+		
+		/*	stampa di test per vedere se stampa le categorie giuste
+		for(String items:caegorieTrovate) {
+			System.out.println(items);
+		}*/
+		
+		// me ne aspetto uno quindi se diverso da uno eccezione
+		if(caegorieTrovate.size() != 2)
+			throw new RuntimeException("testTrovaTuttiCodiciPerMeseOrdine fallito: numero record aspettati inesatto ");
+
+		System.out.println(".......testTrovaTuttiCodiciPerMeseOrdine fine: PASSED.............");
+	}
+	
+	public static void testSommaTotalePerOrdineDestinatario(ArticoloService articoloServiceInstance) throws Exception {
+		System.out.println(".......testSommaTotalePerOrdineDestinatario inizio.............");
+		
+		// inserisco nome di un destinatario gia esistente
+		Long sommaArticoli = articoloServiceInstance.sommaTotalePerOrdineDestinatario("Mario Rossi");
+		// mi aspetto che la somma totale sia 15 per Mario Rossi quindi se diverso eccezione
+		if(sommaArticoli != 15)
+			throw new RuntimeException("testSommaTotalePerOrdineDestinatario fallito: somma non conforme ");
+
+		System.out.println(".......testSommaTotalePerOrdineDestinatario fine: PASSED.............");
+	}
+	
+	public static void testTrovaTuttiIndirizziPerNumeroSerialeLike(OrdineService ordineServiceInstance) throws Exception {
+		System.out.println(".......testTrovaTuttiIndirizziPerNumeroSerialeLike inizio.............");
+		
+		// inserisco come stringa che deve essere contentua nel numero seriale 'ova'
+		List<String> ordiniTrovati = ordineServiceInstance.trovaTuttiIndirizziPerNumeroSerialeLike("ova");
+		// mi aspetto che la somma totale sia 15 per Mario Rossi quindi se diverso eccezione
+		if(ordiniTrovati.size() != 2)
+			throw new RuntimeException("testTrovaTuttiIndirizziPerNumeroSerialeLike fallito: numero record aspettati inesatto ");
+
+		/*	stampa di test per vedere se stampa gli indirizzi giusti
+		for(String items:ordiniTrovati) {
+			System.out.println(items);
+		}*/
+		
+		System.out.println(".......testTrovaTuttiIndirizziPerNumeroSerialeLike fine: PASSED.............");
 	}
 }

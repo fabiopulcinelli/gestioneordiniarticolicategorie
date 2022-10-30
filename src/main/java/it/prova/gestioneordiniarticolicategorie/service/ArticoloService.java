@@ -24,6 +24,8 @@ public interface ArticoloService {
 	
 	public Long sommaTotalePerCategoria(Categoria categoriaInput) throws Exception;
 	
+	public Long sommaTotalePerOrdineDestinatario(String destinatario) throws Exception;
+	
 	// per injection
 	public void setArticoloDAO(ArticoloDAO articoloDAO);
 	

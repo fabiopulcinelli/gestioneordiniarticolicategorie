@@ -73,4 +73,13 @@ public class ArticoloDAOImpl implements ArticoloDAO{
 		query.setParameter(1, categoriaInput.getId());
 		return query.getSingleResult();
 	}
+
+	@Override
+	public Long totalSumByDestinatarioOrdine(String destinatario) throws Exception {
+		TypedQuery<Long> query = entityManager
+				.createQuery("SELECT SUM(a.prezzoSingolo) FROM Articolo a join a.ordine o "
+						+ "WHERE o.nomeDestinatario = ?1", Long.class);
+		query.setParameter(1, destinatario);
+		return query.getSingleResult();
+	}
 }

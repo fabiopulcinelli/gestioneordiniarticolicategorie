@@ -209,4 +209,20 @@ public class ArticoloServiceImpl implements ArticoloService {
 			EntityManagerUtil.closeEntityManager(entityManager);
 		}
 	}
+
+	@Override
+	public Long sommaTotalePerOrdineDestinatario(String destinatario) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+
+		try {
+			articoloDAO.setEntityManager(entityManager);
+
+			return articoloDAO.totalSumByDestinatarioOrdine(destinatario);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
 }
